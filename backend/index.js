@@ -18,7 +18,7 @@ app.use(jsonParser);
 app.use(cors(corsOptions));
 
 app.post("/url", [
-    check("url").isUrl()
+    check("url").isURL()
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -28,14 +28,14 @@ app.post("/url", [
     const { body: { url } } = req; 
     console.info("YOu submitted ", url);
     // Check if in redis else create identifier
-    const identifier = getIdentifier();
+    const identifier = getIdentifier(url);
 
     // Save to redis
     res.json({url, minifiedUrl: `${ADRESS}:${PORT}/${identifier}`});
 });
 
 app.get("/url/:url", [
-    check("url").isUrl()
+    check("url").isURL()
 ], (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

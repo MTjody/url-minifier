@@ -5,7 +5,7 @@
   "main": "backend/index.js",
   "scripts": {
     "test": "jest",
-    "server": "node backend/index.js"
+    "server": "node -r esm backend/index.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +24,7 @@
   "dependencies": {
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
+    "esm": "^3.2.25",
     "express": "^4.17.1",
     "express-validator": "^6.4.0",
     "npm": "^6.13.7"
