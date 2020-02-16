@@ -1,0 +1,38 @@
+{
+  "name": "url-minifier",
+  "version": "1.0.0",
+  "description": "Minify any url",
+  "main": "backend/index.js",
+  "scripts": {
+    "test": "jest",
+    "server": "node -r esm backend/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MTjody/url-minifier.git"
+  },
+  "keywords": [
+    "url",
+    "minifier"
+  ],
+  "author": "MTJody",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MTjody/url-minifier/issues"
+  },
+  "homepage": "https://github.com/MTjody/url-minifier#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "esm": "^3.2.25",
+    "express": "^4.17.1",
+    "express-validator": "^6.4.0",
+    "npm": "^6.13.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "^7.8.4",
+    "babel-jest": "^25.1.0",
+    "jest": "^25.1.0"
+  }
+}

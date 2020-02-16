@@ -1,1 +1,4 @@
 # url-minifier
+
+## Omitted
+Linter
