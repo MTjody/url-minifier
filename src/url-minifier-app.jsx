@@ -1,11 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
+import TextField from '@material-ui/core/TextField';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import LanguageIcon from '@material-ui/icons/Language';
-
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -29,26 +28,45 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-function submit(event) {
-    event.preventDefault();
-    console.info("on submit!");
-}
-
-
 export default function UrlMinifierApp() {
     const classes = useStyles();
+    const [formValid, setFormValid] = useState(true);
+    
+    async function submit(event) {
+        event.preventDefault();
+        const { currentTarget: { elements: { url } }} = event;
+        console.info("on submit!", url.value);
+        setFormValid(url.checkValidity());
+        if (formValid) {
+            const res = await fetch("http://localhost:3000/url", {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({url: url.value}),
+            });
+            console.info("res", res);
+            const json = await res.json();
+            console.info("json", json.minifiedUrl);
+        }
+    }
 
     return (
         <div className={classes.root}>
-            <Paper component="form" onSubmit={submit} className={classes.paper}>
-                <InputBase
+            <Paper component="form" noValidate autoComplete="off" onSubmit={submit} className={classes.paper}>
+                <TextField id="outlined-basic" 
+                    label="Url" variant="outlined"
+                    name="url"
+                    type="url"
+                    error={!formValid}
+                    helperText={!formValid && "Please check your url"}
+                    autoFocus
                     className={classes.input}
                     placeholder="Minify Your Url!"
-                    inputProps={{ 'aria-label': 'minify your url' }}
-                />
+                    inputProps={{ 'aria-label': 'minify your url' }} />    
 
                 <Divider className={classes.divider} orientation="vertical" />
-                <IconButton color="primary" className={classes.iconButton} aria-label="directions">
+                <IconButton onClick={submit} color="primary" className={classes.iconButton} aria-label="minify your url">
                     <LanguageIcon />
                 </IconButton>
             </Paper>
