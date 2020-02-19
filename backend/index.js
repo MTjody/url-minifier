@@ -6,13 +6,15 @@ const { check, validationResult } = require('express-validator');
 const { getIdentifier } = require("./identifier"); 
 
 var corsOptions = {
-    origin: 'http://localhost:8008', // TODO get from env/docker
+    origin: 'http://localhost:8888', // TODO get from env/docker
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
   }
 
 // TODO get from env/docker
 const PORT = 3000;
-const ADRESS = "http://localhost"
+const ADRESS = "http://localhost";
+
+const identifierToUrl = new Map();
 
 app.use(jsonParser);
 app.use(cors(corsOptions));
@@ -30,22 +32,18 @@ app.post("/url", [
     // Check if in redis else create identifier
     const identifier = getIdentifier(url);
 
+    identifierToUrl.set(identifier, url);
     // Save to redis
     res.json({url, minifiedUrl: `${ADRESS}:${PORT}/${identifier}`});
 });
 
-app.get("/url/:url", [
-    check("url").isURL()
-], (req, res) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
+app.get("/:identifier", (req, res) => {
+    const { params: { identifier } } = req;
     
     // Check if in redis else
     // return res.status(404).send("No match =(")
-
-    const redirectUrl = redisClient.get(url)
+    console.info("identifier", identifier);
+    const redirectUrl = identifierToUrl.get(identifier);
     return res.redirect(301, redirectUrl);
 });
 
