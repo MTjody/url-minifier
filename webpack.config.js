@@ -30,6 +30,7 @@ module.exports = () => {
 
         devServer: {
             contentBase: path.join(__dirname, "dist"),
+            // Custom middleware for tinyurl redirects
             before: function (app) {
                 app.get("/:identifier", async (req, res, next) => {
                     const { params: { identifier } } = req;
