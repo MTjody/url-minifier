@@ -3,7 +3,14 @@ import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import TextField from '@material-ui/core/TextField';
 import Language from '@material-ui/icons/Language';
+import Share from "@material-ui/icons/Share";
 import InputAdornment from '@material-ui/core/InputAdornment';
+import Fab from '@material-ui/core/Fab';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -23,12 +30,29 @@ const useStyles = makeStyles(theme => ({
     },
     iconButton: {
         padding: 10,
-    }
+    },
+    contentText: {
+        display: "flex"
+    },
+    scrollableUrl: {
+        display: "inline-block",
+        maxWidth: 140,
+        overflowX: "scroll",
+        whiteSpace: "nowrap",
+        marginRight: 8,
+        boxShadow: "0px 0px 2px 0px grey"
+    },
+    extendedIcon: {
+        marginRight: theme.spacing(1),
+    },
 }));
 
 export default function UrlMinifierApp() {
     const classes = useStyles();
     const [formValid, setFormValid] = useState(true);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [urlToMinify, setUrlToMinify] = useState("");
+    const [minifiedUrl, setMinifiedUrl] = useState("");
 
     async function submit(event) {
         event.preventDefault();
@@ -45,17 +69,29 @@ export default function UrlMinifierApp() {
             });
             const json = await res.json();
             console.info("json", json);
+            setDialogOpen(true);
+            setUrlToMinify(json.url);
+            setMinifiedUrl(`http://localhost:8888/${json.identifier}`);
         }
+    }
+
+    function handleClose() {
+        setDialogOpen(false);
+        setUrlToMinify("");
+        setMinifiedUrl("");
+        document.getElementById("url-minifier-form").reset();
     }
 
     return (
         <div className={classes.root}>
             <Paper component="form"
+                id="url-minifier-form"
                 noValidate
                 autoComplete="off"
                 onSubmit={submit}
                 className={classes.paper}>
-                <TextField id="outlined-basic"
+                <TextField
+                    id="outlined-basic"
                     label="Url"
                     variant="outlined"
                     name="url"
@@ -75,6 +111,33 @@ export default function UrlMinifierApp() {
                     }}
                 />
             </Paper>
+            <Dialog open={dialogOpen} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Hooray</DialogTitle>
+                <DialogContent>
+                    <DialogContentText className={classes.contentText}>
+                        <span className={classes.scrollableUrl}>{urlToMinify}</span> has been minified!
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="minifiedUrl"
+                        label="Minified Url"
+                        type="url"
+                        fullWidth
+                        disabled
+                        value={minifiedUrl}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Fab color="primary"
+                        aria-label="add"
+                        variant="extended"
+                        onClick={handleClose}>
+                        <Share className={classes.extendedIcon}/>
+                        To Do..
+                    </Fab>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };
