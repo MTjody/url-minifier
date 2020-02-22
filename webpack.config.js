@@ -1,6 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
+const fetch = require("node-fetch");
 
 module.exports = () => {
 
@@ -29,6 +30,25 @@ module.exports = () => {
 
         devServer: {
             contentBase: path.join(__dirname, "dist"),
+            before: function (app) {
+                app.get("/:identifier", async (req, res, next) => {
+                    const { params: { identifier } } = req;
+                    const regex = /[a-zA-Z0-9]/g;
+                    if (identifier.length === 6 && regex.test(identifier)) {
+
+                        try {
+                            const result = await fetch(`http://localhost:3000/url/${identifier}`)
+                            const json = await result.json();
+
+                            return res.redirect(301, json.url);
+                        } catch (e) {
+                            console.info("caught error", e);
+                            return res.status(404).send("Oh noes =(");
+                        }
+                    }
+                    next();
+                });
+            },
             compress: true,
             port: 8888,
             historyApiFallback: true,
