@@ -9,13 +9,11 @@ The application is currently written for a local environment. Run the following 
     $ npm run server    # Starts the API server.
 
 ## Testing
-Simply run the below command which runs both unit- and E2E tests.
+Simply run the below command which runs unit-tests.
 
     $ npm t
 
 ## TODO
-- Cypress
-- Refactor FE Code
 - Remember urls between browser sessions
 
 ## Omitted
@@ -26,3 +24,4 @@ Simply run the below command which runs both unit- and E2E tests.
 - Docker w compose setup
 - More love for styling the web app
 - Proper .env handling for e.g. addresses, ports
+- Cypress
