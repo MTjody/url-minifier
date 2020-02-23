@@ -20,6 +20,9 @@ Simply run the below command which runs unit-tests.
 - Proptypes for React Components
 - More love for styling the web app
 - Linter + Formatted for standard code formatting
+- Manage duplicates
+- Use Redux for state management
+- Translations
 - DB store (e.g. Redis key store should do fine)
 - Production web server e.g. NGINX
 - Production grade backend (Docker K8S / Serverless)
