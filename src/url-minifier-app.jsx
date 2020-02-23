@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { makeStyles } from '@material-ui/core/styles';
 import UrlForm from "./components/url-form";
 import UrlDialog from "./components/url-dialog";
+import UrlHistory from "./components/url-history";
+import {addMinifiedUrl, getMinifiedUrls} from "./utils/localStorage";
 
 const useStyles = makeStyles(() => ({
     root: {
@@ -17,6 +19,7 @@ export default function UrlMinifierApp() {
     const [dialogOpen, setDialogOpen] = useState(false);
     const [urlToMinify, setUrlToMinify] = useState("");
     const [minifiedUrl, setMinifiedUrl] = useState("");
+    const [minifiedUrls, setMinifiedUrls] = useState(getMinifiedUrls());
 
     async function submit(url) {
         const res = await fetch("http://localhost:3000/url", {
@@ -27,22 +30,24 @@ export default function UrlMinifierApp() {
             body: JSON.stringify({ url }),
         });
         const json = await res.json();
-        console.info("json", json);
         setDialogOpen(true);
         setUrlToMinify(json.url);
-        setMinifiedUrl(`http://localhost:8888/${json.identifier}`);
+        const minified = `http://localhost:8888/${json.identifier}`;
+        setMinifiedUrl(minified);
+        addMinifiedUrl({url: json.url, minified});
     }
 
-    function handleClose() {
+    function handleCloseDialog() {
         setDialogOpen(false);
         setUrlToMinify("");
         setMinifiedUrl("");
         document.getElementById("url-minifier-form").reset();
+        setMinifiedUrls(getMinifiedUrls());
     }
 
     const dialogProps = {
         open: dialogOpen,
-        handleClose,
+        handleClose: handleCloseDialog,
         urlToMinify, 
         minifiedUrl
     };
@@ -52,6 +57,7 @@ export default function UrlMinifierApp() {
         <div className={classes.root}>
             <UrlForm submit={submit} />
             <UrlDialog {...dialogProps} />
+            <UrlHistory minifiedUrls={minifiedUrls}/>
         </div>
     );
 };
