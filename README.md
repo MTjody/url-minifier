@@ -14,14 +14,14 @@ Simply run the below command which runs unit-tests.
     $ npm t
 
 ## TODO
-- Remember urls between browser sessions
+- Cypress.io for e2e testing
 
 ## Omitted
-- Linter + Formatted for standard code formatting.
-- Production web server e.g. NGINX.
 - Proptypes for React Components
-- DB store (e.g. Redis key store should do fine)
-- Docker w compose setup
 - More love for styling the web app
+- Linter + Formatted for standard code formatting
+- DB store (e.g. Redis key store should do fine)
+- Production web server e.g. NGINX
+- Production grade backend (Docker K8S / Serverless)
 - Proper .env handling for e.g. addresses, ports
-- Cypress
+- Docker w compose setup

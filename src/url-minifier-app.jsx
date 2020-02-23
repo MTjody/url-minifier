@@ -31,6 +31,15 @@ export default function UrlMinifierApp() {
         setDialogOpen(true);
         setUrlToMinify(json.url);
         setMinifiedUrl(`http://localhost:8888/${json.identifier}`);
+        let urls = localStorage.getItem("minified.urls");
+        if (urls === undefined) {
+            urls = [];
+        }
+        if (urls.length === 10) {
+            urls.shift();
+        }
+        urls.push(i);
+        localStorage.setItem("minified.urls", urls);
     }
 
     function handleClose() {
