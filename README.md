@@ -15,8 +15,6 @@ Simply run the below command which runs unit-tests.
 
 ## TODO
 - Cypress.io for e2e testing
-
-## Omitted
 - Proptypes for React Components
 - More love for styling the web app
 - Linter + Formatted for standard code formatting
